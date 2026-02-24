@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="bg-white p-8 rounded-lg shadow-sm border">
+    <h2 class="text-xl font-bold text-gray-800 border-r-4 border-blue-900 pr-3 mb-8">کمیته علمی کنفرانس</h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {% for prof in committee %}
+        <div class="flex items-center gap-4 p-4 border rounded-xl hover:bg-gray-50 transition">
+            <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-xl">
+                {% if prof.image %}
+                    <img src="{{ prof.image.url }}" class="w-full h-full rounded-full object-cover">
+                {% else %}
+                    {{ prof.user.first_name|first }}
+                {% endif %}
+            </div>
+            <div>
+                <h4 class="font-bold text-gray-800">{{ prof.user.get_full_name }}</h4>
+                <p class="text-xs text-gray-500">{{ prof.get_rank_display }} - {{ prof.university }}</p>
+                <p class="text-xs text-blue-600 mt-1">تخصص: {{ prof.expertise }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

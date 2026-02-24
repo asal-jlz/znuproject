@@ -1,0 +1,16 @@
+<script src="https://cdn.tailwindcss.com"></script>
+<body class="bg-gray-100 flex items-center justify-center h-screen text-right" dir="rtl">
+    <div class="bg-white p-8 rounded-lg shadow-md w-96">
+        <h2 class="text-2xl font-bold mb-6 text-center text-green-600">ثبت‌نام دانشجو / استاد</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="space-y-4">
+                {{ form.as_p }}
+            </div>
+            <button type="submit" class="w-full bg-green-600 text-white py-2 rounded mt-6 hover:bg-green-700">ثبت‌نام</button>
+        </form>
+        <p class="mt-4 text-center text-sm text-gray-600">
+            قبلاً ثبت‌نام کرده‌اید؟ <a href="{% url 'login' %}" class="text-blue-500 hover:underline">ورود</a>
+        </p>
+    </div>
+</body>

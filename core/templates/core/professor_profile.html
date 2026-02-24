@@ -1,0 +1,32 @@
+<script src="https://cdn.tailwindcss.com"></script>
+<body class="bg-gray-50 text-right" dir="rtl">
+    <div class="container mx-auto py-12 px-4">
+        <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden">
+            <div class="md:flex">
+                <div class="md:w-1/3 bg-blue-600 p-8 text-center text-white">
+                    <div class="w-32 h-32 bg-white rounded-full mx-auto mb-4 overflow-hidden">
+                        {% if prof.image %}
+                            <img src="{{ prof.image.url }}" class="w-full h-full object-cover">
+                        {% else %}
+                            <div class="text-blue-600 text-4xl mt-8">👤</div>
+                        {% endif %}
+                    </div>
+                    <h1 class="text-xl font-bold">{{ prof.user.get_full_name }}</h1>
+                    <p class="text-blue-100 mt-2">{{ prof.expertise }}</p>
+                </div>
+                <div class="md:w-2/3 p-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">درباره استاد</h2>
+                    <p class="text-gray-600 leading-relaxed">{{ prof.bio }}</p>
+                    
+                    <div class="mt-8 pt-8 border-t">
+                        <h3 class="font-bold text-gray-800 mb-2">اطلاعات تماس</h3>
+                        <p class="text-gray-600 italic">ایمیل: {{ prof.user.email }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-6">
+            <a href="{% url 'home' %}" class="text-blue-600 hover:underline">← بازگشت به صفحه اصلی</a>
+        </div>
+    </div>
+</body>

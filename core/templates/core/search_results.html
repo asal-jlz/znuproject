@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+    <h2 class="text-2xl font-black text-blue-900 mb-6">🔍 نتایج جستجو برای: <span class="text-blue-600">"{{ query }}"</span></h2>
+
+    {% if not news and not topics and not articles %}
+        <div class="text-center py-20">
+            <p class="text-gray-400">متأسفانه نتیجه‌ای یافت نشد. کلمات کلیدی دیگری را امتحان کنید.</p>
+        </div>
+    {% else %}
+
+        {% if news %}
+        <div class="mb-10">
+            <h3 class="text-lg font-bold text-gray-800 mb-4 border-r-4 border-red-500 pr-3">📰 اخبار یافت شده</h3>
+            <div class="space-y-4">
+                {% for item in news %}
+                <a href="{% url 'news_detail' item.pk %}" class="block p-4 bg-gray-50 rounded-xl hover:bg-red-50 transition border border-transparent hover:border-red-100">
+                    <h4 class="font-bold text-blue-800">{{ item.title }}</h4>
+                    <p class="text-xs text-gray-500 mt-1">{{ item.content|truncatewords:20 }}</p>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if topics %}
+        <div class="mb-10">
+            <h3 class="text-lg font-bold text-gray-800 mb-4 border-r-4 border-blue-500 pr-3">🎯 محورهای کنفرانس</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {% for topic in topics %}
+                <div class="p-4 border rounded-xl bg-blue-50/50">
+                    <h4 class="font-bold text-sm text-blue-900">{{ topic.title }}</h4>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if articles %}
+        <div class="mb-10">
+            <h3 class="text-lg font-bold text-gray-800 mb-4 border-r-4 border-green-500 pr-3">📄 مقالات مرتبط با شما</h3>
+            <div class="space-y-3">
+                {% for art in articles %}
+                <div class="p-4 border rounded-xl flex justify-between items-center bg-green-50/30">
+                    <div>
+                        <h4 class="font-bold text-sm">{{ art.title }}</h4>
+                        <span class="text-[10px] text-gray-400">کد رهگیری: {{ art.tracking_code }}</span>
+                    </div>
+                    <a href="{% url 'dashboard' %}" class="text-xs text-green-700 font-bold">مشاهده در داشبورد ←</a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+    {% endif %}
+</div>
+{% endblock %}

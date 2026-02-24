@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پرتال جامع کنفرانس‌های علمی | دانشگاه زنجان</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;400;700&display=swap');
+        body { font-family: 'Vazirmatn', sans-serif; scroll-behavior: smooth; }
+        .sidebar-sticky { position: sticky; top: 5rem; }
+        /* استایل سفارشی برای اسکرول‌بار چت هوش مصنوعی */
+        #chat-messages::-webkit-scrollbar { width: 4px; }
+        #chat-messages::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="bg-blue-900 text-white py-2 px-4 text-[10px] md:text-xs">
+        <div class="container mx-auto flex justify-between items-center">
+            <div>دبیرخانه دائمی کنفرانس‌های مهندسی دانشگاه زنجان</div>
+            <div dir="ltr">{% now "l, F d, Y" %}</div>
+        </div>
+    </div>
+
+    <header class="bg-white shadow-sm border-b sticky top-0 z-50">
+        <div class="container mx-auto p-4 flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <button class="md:hidden text-2xl" onclick="toggleMobileMenu()">☰</button>
+                <div class="flex flex-col">
+                    <h1 class="text-xl font-black text-blue-900 leading-none">ZNU-ICEE 2026</h1>
+                    <span class="text-[9px] text-gray-400 font-bold uppercase">Conference Portal</span>
+                </div>
+            </div>
+        
+            <nav id="nav-menu" class="hidden md:flex gap-6 text-sm font-bold">
+                <a href="{% url 'home' %}" class="hover:text-blue-700 transition">صفحه اصلی</a>
+                <a href="{% url 'scientific_committee' %}" class="hover:text-blue-700 transition">کمیته علمی</a>
+                <a href="{% url 'contact_us' %}" class="hover:text-blue-700 transition">تماس با ما</a>
+            </nav>
+    
+            <div class="flex items-center gap-4">
+                {% if user.is_authenticated %}
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] text-gray-500 hidden lg:inline">{{ user.username }}</span>
+                        <a href="{% url 'dashboard' %}" class="bg-blue-800 text-white px-4 py-2 rounded-lg text-[10px] font-bold shadow-md hover:bg-blue-900 transition">پنل من</a>
+                        <form action="{% url 'logout' %}" method="post" class="m-0">
+                            {% csrf_token %}
+                            <button type="submit" class="bg-gray-100 text-gray-600 px-3 py-2 rounded-lg text-[10px] font-bold hover:bg-red-50 hover:text-red-600 transition">خروج</button>
+                        </form>
+                    </div>
+                {% else %}
+                    <a href="{% url 'login' %}" class="bg-blue-900 text-white px-6 py-2 rounded-lg text-xs font-bold hover:bg-blue-800 transition shadow-md">ورود به سامانه</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <div class="container mx-auto my-8 px-4 flex flex-wrap lg:flex-nowrap gap-8">
+        
+        <aside class="w-full lg:w-1/4 space-y-6">
+            
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
+                <h3 class="text-xs font-bold text-gray-700 mb-3 flex items-center gap-2">🔍 جستجوی سایت</h3>
+                <form action="{% url 'global_search' %}" method="get" class="relative">
+                    <input type="text" name="q" placeholder="جستجوی خبر، مقاله، محور..." class="w-full p-2.5 pr-9 text-[10px] border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all bg-gray-50">
+                    <button type="submit" class="absolute right-3 top-2.5 text-gray-400">🔎</button>
+                </form>
+            </div>
+
+            <div class="bg-gradient-to-br from-blue-900 to-indigo-900 rounded-2xl shadow-lg p-5 text-white">
+                <h3 class="text-center text-[10px] font-bold mb-4 border-b border-blue-700 pb-2 opacity-80">⏳ مهلت ارسال مقالات</h3>
+                <div id="countdown" class="flex justify-between items-center px-2">
+                    <div class="text-center"><span id="days" class="text-xl font-black block">00</span><span class="text-[8px] opacity-60">روز</span></div>
+                    <div class="text-lg opacity-30">:</div>
+                    <div class="text-center"><span id="hours" class="text-xl font-black block">00</span><span class="text-[8px] opacity-60">ساعت</span></div>
+                    <div class="text-lg opacity-30">:</div>
+                    <div class="text-center"><span id="minutes" class="text-xl font-black block">00</span><span class="text-[8px] opacity-60">دقیقه</span></div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="bg-red-600 p-3 text-white text-xs font-bold text-center">🗓 تاریخ‌های مهم</div>
+                <div class="p-4 space-y-3">
+                    <div class="flex justify-between items-center border-b border-gray-50 pb-2">
+                        <span class="text-[10px] text-gray-400">ارسال مقالات:</span>
+                        <span class="text-xs font-bold text-red-600">{{ conference.submission_deadline|date:"Y/m/d"|default:"----/--/--" }}</span>
+                    </div>
+                    <div class="flex justify-between items-center border-b border-gray-50 pb-2">
+                        <span class="text-[10px] text-gray-400">اعلام نتایج:</span>
+                        <span class="text-xs font-bold text-gray-700">{{ conference.acceptance_notification|date:"Y/m/d"|default:"----/--/--" }}</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] text-gray-400">برگزاری:</span>
+                        <span class="text-xs font-bold text-gray-700">{{ conference.hold_date|date:"Y/m/d"|default:"----/--/--" }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-2 rounded-2xl shadow-sm border border-gray-100">
+                <p class="text-[10px] font-bold text-center text-gray-400 mb-2">OFFICIAL POSTER</p>
+                <img src="https://via.placeholder.com/300x420" class="w-full h-auto rounded-xl hover:brightness-110 transition cursor-pointer" alt="Poster">
+            </div>
+
+            <div class="bg-white rounded-2xl border border-gray-100 p-4 text-center shadow-sm">
+                <h3 class="text-[9px] font-black text-gray-400 mb-4 tracking-widest">STATISTICS</h3>
+                <div class="grid grid-cols-2 gap-2">
+                    <div class="bg-gray-50 p-2 rounded-lg border border-gray-100">
+                        <span class="block font-black text-blue-900 text-sm">۱,۲۴۰</span>
+                        <span class="text-[8px] text-gray-400">امروز</span>
+                    </div>
+                    <div class="bg-gray-50 p-2 rounded-lg border border-gray-100">
+                        <span class="block font-black text-blue-900 text-sm">۱۵,۴۲۰</span>
+                        <span class="text-[8px] text-gray-400">کل بازدید</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="w-full lg:w-3/4">
+            {% block content %}
+            {% endblock %}
+        </main>
+    </div>
+
+    <footer class="bg-gray-900 text-gray-400 mt-20 pt-16 pb-8 border-t-4 border-blue-900">
+        <div class="container mx-auto px-4 text-right">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+                <div>
+                    <h4 class="text-white font-bold mb-6">درباره کنفرانس</h4>
+                    <p class="text-[11px] leading-7 italic text-gray-500">این کنفرانس بستری برای تبادل یافته‌های نوین در مهندسی برق و کامپیوتر فراهم می‌کند.</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-6">دسترسی سریع</h4>
+                    <ul class="text-[11px] space-y-3">
+                        <li><a href="{% url 'home' %}#topics" class="hover:text-blue-400 transition">🎯 محورهای تخصصی</a></li>
+                        <li><a href="{% url 'home' %}#faq" class="hover:text-blue-400 transition">❓ سوالات متداول</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-6">تماس با ما</h4>
+                    <div class="text-[11px] space-y-2 leading-6">
+                        <p>📍 زنجان، دانشگاه زنجان، دانشکده مهندسی</p>
+                        <p dir="ltr">📞 +98 24 3305 1234</p>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-6">نقشه محل برگزاری</h4>
+                    <div class="rounded-xl overflow-hidden grayscale opacity-60 hover:opacity-100 transition h-32 bg-gray-800">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3183.33!2d48.3!3d36.7!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzbCsDQyJzAwLjAiTiA0OMKwMTgnMDAuMCJF!5e0!3m2!1sen!2sir!4v1620000000000!5m2!1sen!2sir" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 text-center text-[9px]">
+                <p>© 2026 ZNU-ICEE | تمامی حقوق متعلق به دانشگاه زنجان است</p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="fixed bottom-6 left-6 z-[100]">
+        <button onclick="toggleAIChat()" class="bg-blue-600 text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-all border-4 border-white">
+            <span class="text-2xl">🤖</span>
+        </button>
+        
+        <div id="ai-chat-window" class="hidden absolute bottom-20 left-0 w-80 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden flex flex-col transition-all">
+            <div class="bg-blue-900 p-4 text-white flex justify-between items-center">
+                <span class="text-xs font-bold">دستیار هوشمند ZNU-ICEE</span>
+                <button onclick="toggleAIChat()" class="text-lg">×</button>
+            </div>
+            <div id="chat-messages" class="h-64 p-4 overflow-y-auto text-[11px] space-y-4 bg-gray-50">
+                <div class="bg-blue-100 p-3 rounded-2xl rounded-tr-none ml-8 text-blue-900 shadow-sm">
+                    سلام! من دستیار هوشمند کنفرانس هستم. چطور می‌تونم بهت کمک کنم؟
+                </div>
+            </div>
+            <div class="p-3 bg-white border-t flex gap-2">
+                <input id="ai-input" type="text" placeholder="سوالت رو بپرس..." class="flex-1 text-[10px] p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500">
+                <button onclick="sendToAI()" class="bg-blue-600 text-white px-3 py-1 rounded-lg text-[10px] font-bold">ارسال</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ۱. کنترل منوی موبایل
+        function toggleMobileMenu() {
+            document.getElementById('nav-menu').classList.toggle('hidden');
+        }
+
+        // ۲. کنترل چت هوشمند
+        function toggleAIChat() {
+            document.getElementById('ai-chat-window').classList.toggle('hidden');
+        }
+
+        // ۳. شمارش معکوس
+        const deadlineStr = "{{ conference.submission_deadline|date:'Y-m-d' }}";
+        if (deadlineStr) {
+            const countDate = new Date(deadlineStr).getTime();
+            setInterval(function() {
+                const now = new Date().getTime();
+                const gap = countDate - now;
+                const second = 1000, minute = second * 60, hour = minute * 60, day = hour * 24;
+                if (gap > 0) {
+                    document.getElementById('days').innerText = Math.floor(gap / day);
+                    document.getElementById('hours').innerText = Math.floor((gap % day) / hour);
+                    document.getElementById('minutes').innerText = Math.floor((gap % hour) / minute);
+                }
+            }, 1000);
+        }
+
+        // ۴. تابع ارسال پیام (فعلاً نمایشی)
+        async function sendToAI() {
+          const input = document.getElementById('ai-input');
+         const messages = document.getElementById('chat-messages');
+         const text = input.value.trim();
+    
+        if (text !== "") {
+        // پیام کاربر
+             messages.innerHTML += `<div class="bg-white p-3 rounded-2xl rounded-tl-none mr-8 text-gray-700 shadow-sm border border-gray-100">${text}</div>`;
+             input.value = "";
+        
+        // درخواست از سرور
+             const response = await fetch(`/ai-assistant/?msg=${text}`);
+             const data = await response.json();
+        
+        // پاسخ هوش مصنوعی
+             messages.innerHTML += `<div class="bg-blue-100 p-3 rounded-2xl rounded-tr-none ml-8 text-blue-900 shadow-sm">${data.reply}</div>`;
+             messages.scrollTop = messages.scrollHeight;
+    }
+}
+    </script>
+</body>
+</html>

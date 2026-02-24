@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white p-8 rounded-3xl shadow-lg border border-gray-100">
+    <div class="text-center mb-8">
+        <h2 class="text-2xl font-black text-blue-900">💳 ثبت اطلاعات پرداخت</h2>
+        <p class="text-xs text-gray-500 mt-2">مقاله: {{ article.title }}</p>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" class="space-y-6">
+        {% csrf_token %}
+        
+        <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 text-[11px] text-blue-800 leading-6">
+            <strong>راهنما:</strong> لطفاً مبلغ واریزی را به ریال وارد کرده و تصویر واضحی از فیش بانکی (یا اسکرین‌شات موبایل‌بانک) را آپلود نمایید. تایید نهایی توسط دبیرخانه ۱ تا ۳ روز کاری زمان می‌برد.
+        </div>
+
+        <div>
+            <label class="block text-xs font-bold mb-2">مبلغ واریزی (ریال):</label>
+            {{ form.amount }}
+        </div>
+
+        <div>
+            <label class="block text-xs font-bold mb-2">آپلود تصویر فیش:</label>
+            {{ form.receipt_image }}
+        </div>
+
+        <button type="submit" class="w-full bg-green-600 text-white py-3 rounded-xl font-bold shadow-lg shadow-green-100 hover:bg-green-700 transition">
+            ثبت و ارسال جهت تایید
+        </button>
+    </form>
+</div>
+{% endblock %}

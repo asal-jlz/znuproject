@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+    <div class="flex justify-between items-center mb-10 pb-4 border-b">
+        <h2 class="text-2xl font-black text-blue-900">👨‍🏫 میز کار استاد: {{ user.get_full_name }}</h2>
+        <span class="bg-blue-100 text-blue-700 px-4 py-1 rounded-full text-[10px] font-bold">تعداد مقالات: {{ articles.count }}</span>
+    </div>
+
+    <div class="grid grid-cols-1 gap-8">
+        {% for art in articles %}
+        <div class="bg-gray-50 border border-gray-200 rounded-2xl p-6 hover:shadow-md transition-all">
+            <div class="flex flex-col gap-4">
+                
+                <div class="flex justify-between items-start">
+                    <div class="flex items-center gap-3">
+                        <span class="bg-blue-600 text-white text-[10px] px-2 py-1 rounded font-mono font-bold">{{ art.tracking_code|default:"بدون کد" }}</span>
+                        <h3 class="text-lg font-bold text-gray-800">{{ art.title }}</h3>
+                    </div>
+                    <a href="{{ art.file.url }}" class="text-blue-600 hover:text-blue-800 flex items-center gap-1 text-xs font-bold">
+                        📄 دانلود فایل مقاله
+                    </a>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-gray-500">
+                    <p>👤 فرستنده: <span class="text-gray-800 font-bold">{{ art.student.user.get_full_name }}</span></p>
+                    <p>📅 تاریخ ارسال: <span class="text-gray-800">{{ art.created_at|date:"Y/m/d" }}</span></p>
+                </div>
+
+                <hr class="border-gray-200">
+
+                <form method="post" class="space-y-4">
+                    {% csrf_token %}
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-600 mb-2">✍️ نظرات داوری و اصلاحات:</label>
+                        <textarea name="comment" rows="2" class="w-full p-3 text-sm border rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all" placeholder="دلیل رد یا نکات اصلاحی را اینجا بنویسید...">{{ art.professor_comment|default:"" }}</textarea>
+                    </div>
+
+                    <div class="flex flex-wrap gap-2">
+                        <button type="submit" 
+                                formaction="{% url 'update_status' art.id 'accepted' %}"
+                                class="flex-1 bg-green-600 text-white py-2 px-4 rounded-xl text-xs font-bold hover:bg-green-700 transition shadow-sm">
+                            ✅ تایید نهایی
+                        </button>
+                        
+                        <button type="submit" 
+                                formaction="{% url 'update_status' art.id 'rejected' %}"
+                                class="flex-1 bg-red-500 text-white py-2 px-4 rounded-xl text-xs font-bold hover:bg-red-600 transition shadow-sm">
+                            ❌ نیاز به اصلاح
+                        </button>
+                    </div>
+                </form>
+
+                <div class="mt-2 pt-2 border-t border-dashed flex items-center justify-between">
+                    <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Status:</span>
+                    {% if art.status == 'accepted' %}
+                        <span class="text-green-600 font-bold text-xs">پذیرفته شده</span>
+                    {% elif art.status == 'rejected' %}
+                        <span class="text-red-600 font-bold text-xs">نیاز به اصلاح</span>
+                    {% else %}
+                        <span class="text-yellow-600 font-bold text-xs">در حال داوری</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="text-center py-20 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
+            <p class="text-gray-400 italic text-sm">هنوز مقاله‌ای برای شما ارسال نشده است.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

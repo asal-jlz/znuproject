@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+    <nav class="text-xs text-gray-400 mb-6 flex gap-2">
+        <a href="{% url 'home' %}">صفحه اصلی</a>
+        <span>/</span>
+        <span>اخبار کنفرانس</span>
+    </nav>
+
+    <h1 class="text-2xl font-black text-blue-900 mb-4">{{ news_item.title }}</h1>
+    <div class="text-xs text-gray-400 mb-8 pb-4 border-b">
+        📅 منتشر شده در تاریخ: {{ news_item.created_at|date:"Y/m/d" }}
+    </div>
+
+    <div class="text-gray-700 leading-9 text-justify mb-10">
+        {{ news_item.content|linebreaks }}
+    </div>
+
+    <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+        <p class="text-xs text-blue-800 font-bold">دبیرخانه کنفرانس مهندسی برق و کامپیوتر - دانشگاه زنجان</p>
+    </div>
+</div>
+{% endblock %}

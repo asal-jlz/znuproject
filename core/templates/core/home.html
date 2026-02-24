@@ -1,0 +1,223 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div class="swiper mySwiper rounded-2xl shadow-lg mb-8 h-64 md:h-96 overflow-hidden border-4 border-white">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide relative">
+            <img src="https://images.unsplash.com/photo-1541339907198-e08756ebafe3?q=80&w=1000" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center text-white">
+                <div class="text-center">
+                    <h2 class="text-2xl md:text-4xl font-black mb-2">دانشگاه زنجان؛ میزبان نخبگان</h2>
+                    <p class="text-sm md:text-lg italic text-blue-100">برگزاری سی و چهارمین دوره کنفرانس بین‌المللی</p>
+                </div>
+            </div>
+        </div>
+        <div class="swiper-slide relative">
+            <img src="https://images.unsplash.com/photo-1523050335392-93851179ae22?q=80&w=1000" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-black bg-opacity-40 flex items-end p-10 text-white">
+                <div class="text-right">
+                    <h2 class="text-xl md:text-3xl font-bold mb-2">ارسال مقالات تا ۱۵ آذرماه</h2>
+                    <p class="text-xs md:text-sm">فرصت را برای ثبت دستاوردهای علمی خود از دست ندهید</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="swiper-pagination"></div>
+    <div class="swiper-button-next text-white"></div>
+    <div class="swiper-button-prev text-white"></div>
+</div>
+
+<script>
+  var swiper = new Swiper(".mySwiper", {
+    loop: true,
+    autoplay: { delay: 4000 },
+    pagination: { el: ".swiper-pagination", clickable: true },
+    navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
+  });
+</script>
+
+<div class="my-12 bg-white p-4 rounded-3xl shadow-sm border border-gray-100 overflow-hidden group">
+    <div class="flex flex-col md:flex-row gap-8 items-center">
+        <div class="w-full md:w-1/3">
+            <img src="https://via.placeholder.com/600x850" class="w-full h-auto rounded-2xl shadow-xl transition duration-500 group-hover:scale-105" alt="پوستر اصلی کنفرانس">
+        </div>
+        <div class="w-full md:w-2/3">
+            <h2 class="text-3xl font-black text-blue-900 mb-6 italic">سی و چهارمین کنفرانس بین‌المللی مهندسی برق</h2>
+            <p class="text-gray-600 leading-8 text-justify text-sm mb-6">
+                دبیرخانه کنفرانس از تمامی پژوهشگران، اساتید و دانشجویان دعوت می‌نماید تا آخرین یافته‌های علمی خود را در محورهای تعیین شده ارسال نمایند. این دوره با تمرکز بر تکنولوژی‌های نوین و هوش مصنوعی برگزار خواهد شد.
+            </p>
+            <div class="flex gap-4">
+                <a href="#" class="bg-red-600 text-white px-8 py-3 rounded-xl text-xs font-bold shadow-lg shadow-red-200">دریافت فایل پوستر (PDF)</a>
+                <a href="#" class="bg-gray-800 text-white px-8 py-3 rounded-xl text-xs font-bold">تاریخچه کنفرانس</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+    <h2 class="text-xl font-bold text-gray-800 border-r-4 border-blue-900 pr-3 mb-8">🗞 آخرین اطلاعیه‌ها</h2>
+    </div>
+
+
+
+<div class="bg-white p-8 rounded-lg shadow-sm border">
+    <h2 class="text-xl font-bold text-gray-800 border-r-4 border-blue-900 pr-3 mb-8">آخرین اخبار و اطلاعیه‌ها</h2>
+    
+    {% for item in news %}
+    <div class="mb-8 border-b pb-6 last:border-0">
+        <div class="flex justify-between items-center mb-2">
+            <h3 class="text-lg font-bold text-blue-700">
+                <a href="{% url 'news_detail' item.pk %}" class="hover:underline">
+                    {{ item.title }}
+                </a>
+            </h3>
+            <span class="text-xs text-gray-400">{{ item.created_at|date:"Y/m/d" }}</span>
+        </div>
+        <p class="text-gray-600 leading-7 text-sm">
+            {{ item.content|truncatewords:50 }}
+        </p>
+        <a href="#" class="text-blue-500 text-xs mt-3 inline-block font-bold">ادامه خبر ...</a>
+    </div>
+    {% empty %}
+    <p class="text-center text-gray-400 py-10 italic">هنوز خبری منتشر نشده است.</p>
+    {% endfor %}
+</div>
+
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 my-12">
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
+        <div class="text-3xl mb-2">📄</div>
+        <div class="text-2xl font-black text-blue-900">+۲۵۰</div>
+        <div class="text-xs text-gray-500 font-bold">مقاله ارسالی</div>
+    </div>
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
+        <div class="text-3xl mb-2">👨‍🏫</div>
+        <div class="text-2xl font-black text-blue-900">+۸۰</div>
+        <div class="text-xs text-gray-500 font-bold">داور متخصص</div>
+    </div>
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
+        <div class="text-3xl mb-2">🎓</div>
+        <div class="text-2xl font-black text-blue-900">۱۵</div>
+        <div class="text-xs text-gray-500 font-bold">کارگاه آموزشی</div>
+    </div>
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
+        <div class="text-3xl mb-2">🌍</div>
+        <div class="text-2xl font-black text-blue-900">۵</div>
+        <div class="text-xs text-gray-500 font-bold">سخنران کلیدی</div>
+    </div>
+</div>
+
+<div class="mt-16">
+    <h2 class="text-xl font-bold text-gray-800 border-r-4 border-blue-900 pr-3 mb-8">🎤 سخنرانان کلیدی</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        {% for speaker in speakers %}
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center hover:shadow-lg transition">
+            <img src="{{ speaker.image.url }}" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover border-4 border-blue-50">
+            <h3 class="font-bold text-gray-800">{{ speaker.name }}</h3>
+            <p class="text-[10px] text-blue-600 mb-2 font-bold">{{ speaker.designation }}</p>
+            <p class="text-[10px] text-gray-500 mb-2">{{ speaker.university }}</p>
+            <div class="bg-gray-50 p-2 rounded-lg">
+                <p class="text-[9px] text-gray-700 leading-4 italic">موضوع: {{ speaker.topic }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="mt-12 bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+    <h2 class="text-lg font-bold text-gray-700 border-r-4 border-blue-900 pr-3 mb-8 text-center md:text-right">حامیان و همکاران کنفرانس</h2>
+    
+    <div class="flex flex-wrap justify-center items-center gap-10 opacity-70 hover:opacity-100 transition-opacity">
+        {% for sponsor in sponsors %}
+            <div class="text-center group">
+                {% if sponsor.link %}
+                    <a href="{{ sponsor.link }}" target="_blank">
+                {% endif %}
+                
+                <img src="{{ sponsor.logo.url }}" alt="{{ sponsor.name }}" title="{{ sponsor.name }}" class="h-16 w-auto grayscale group-hover:grayscale-0 transition-all duration-300">
+                <p class="text-[10px] mt-2 text-gray-500">{{ sponsor.name }}</p>
+                
+                {% if sponsor.link %}
+                    </a>
+                {% endif %}
+            </div>
+        {% empty %}
+            <p class="text-gray-400 text-sm italic">حامی مالی یا معنوی ثبت نشده است.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="mt-12 mb-12">
+    <h2 class="text-xl font-bold text-gray-800 border-r-4 border-blue-900 pr-3 mb-8">🎯 محورهای تخصصی کنفرانس</h2>
+    
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for topic in topics %}
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+            <div class="w-12 h-12 bg-blue-50 text-blue-700 rounded-xl flex items-center justify-center text-2xl mb-4">
+                {% if topic.icon_code %}
+                    <span>{{ topic.icon_code }}</span>
+                {% else %}
+                    <span>📚</span>
+                {% endif %}
+            </div>
+            <h3 class="font-bold text-gray-800 mb-2">{{ topic.title }}</h3>
+            <p class="text-xs text-gray-500 leading-5 italic">{{ topic.description|truncatechars:80 }}</p>
+        </div>
+        {% empty %}
+            <p class="text-gray-400 text-sm italic">محوری ثبت نشده است.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="mt-16 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="grid grid-cols-1 md:grid-cols-2">
+        <div class="p-8">
+            <h2 class="text-xl font-bold text-blue-900 mb-4 border-r-4 border-blue-900 pr-3">📍 محل برگزاری کنفرانس</h2>
+            <p class="text-sm text-gray-600 mb-4 font-bold">دانشگاه زنجان - دانشکده مهندسی</p>
+            <p class="text-xs text-gray-500 leading-7">کنفرانس در سالن همایش‌های بین‌المللی غدیر برگزار خواهد شد. جهت دسترسی راحت‌تر، می‌توانید از نقشه مقابل استفاده کنید.</p>
+        </div>
+        <div class="h-64 bg-gray-200">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3183.123456789!2d48.398!3d36.685!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzbCsDQxJzA2LjAiTiA0OMKwMjMnNTIuOCJF!5e0!3m2!1sen!2sir!4v1620000000000" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+    </div>
+</div>
+
+<div id="topics" class="scroll-mt-24">
+</div>
+
+<div id="faq" class="mt-16 scroll-mt-24">
+<h2 class="text-xl font-bold text-gray-800 border-r-4 border-blue-900 pr-3 mb-8">❓ سوالات متداول (FAQ)</h2>
+
+<div class="space-y-4">
+    {% for faq in faqs %}
+    <div class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+        <button class="w-full p-5 text-right flex justify-between items-center hover:bg-gray-50 transition-colors" onclick="toggleFAQ({ forloop.counter })">
+            <span class="font-bold text-gray-700 text-sm md:text-base">{{ faq.question }}</span>
+            <span id="icon-{{ forloop.counter }}" class="text-blue-600 font-bold transition-transform duration-300">+</span>
+        </button>
+        <div id="ans-{{ forloop.counter }}" class="hidden p-5 border-t border-gray-100 text-sm text-gray-600 leading-7 bg-gray-50">
+            {{ faq.answer }}
+        </div>
+    </div>
+    {% empty %}
+    <p class="text-center text-gray-400 italic">سوالی ثبت نشده است.</p>
+    {% endfor %}
+</div>
+</div>
+
+<script>
+function toggleFAQ(id) {
+const ans = document.getElementById('ans-' + id);
+const icon = document.getElementById('icon-' + id);
+if (ans.classList.contains('hidden')) {
+    ans.classList.remove('hidden');
+    icon.innerText = '−';
+    icon.style.transform = 'rotate(180deg)';
+} else {
+    ans.classList.add('hidden');
+    icon.innerText = '+';
+    icon.style.transform = 'rotate(0deg)';
+}
+}
+</script>
+{% endblock %}

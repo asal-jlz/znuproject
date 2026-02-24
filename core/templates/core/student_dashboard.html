@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+    <div class="flex justify-between items-center mb-8 pb-4 border-b">
+        <h2 class="text-xl font-bold text-gray-800">📋 لیست مقالات ارسالی شما</h2>
+        <a href="{% url 'upload_article' %}" class="bg-green-600 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-green-700 transition shadow-lg">
+            ارسال مقاله جدید +
+        </a>
+    </div>
+
+    <div class="overflow-x-auto">
+        <table class="w-full text-right">
+            <thead>
+                <tr class="bg-gray-50 text-gray-500 text-[11px] uppercase tracking-widest">
+                    <th class="p-4 border-b font-black">کد رهگیری</th>
+                    <th class="p-4 border-b font-black">عنوان مقاله</th>
+                    <th class="p-4 border-b font-black">استاد راهنما</th>
+                    <th class="p-4 border-b font-black">وضعیت و نظرات</th>
+                </tr>
+            </thead>
+            <tbody class="text-sm">
+                {% for art in articles %}
+                <tr class="border-b last:border-0 hover:bg-blue-50/30 transition">
+                    <td class="p-4 font-mono font-bold text-blue-700 text-xs">{{ art.tracking_code|default:"---" }}</td>
+                    <td class="p-4 font-medium text-gray-800">{{ art.title }}</td>
+                    <td class="p-4 text-gray-500 text-xs">{{ art.advisor.user.get_full_name }}</td>
+                    <td class="p-4">
+                        {% if art.status == 'accepted' %}
+                            <div class="bg-green-100 text-green-700 px-3 py-1 rounded-lg text-[10px] font-bold inline-block mb-1">✅ پذیرفته شده</div>
+                        {% elif art.status == 'rejected' %}
+                            <div class="bg-red-100 text-red-700 px-3 py-1 rounded-lg text-[10px] font-bold inline-block mb-1">❌ نیاز به اصلاح</div>
+                        {% else %}
+                            <div class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-lg text-[10px] font-bold inline-block mb-1">⏳ در حال داوری</div>
+                        {% endif %}
+
+                        {% if art.professor_comment %}
+                            <div class="mt-2 p-2 bg-gray-50 border-r-2 border-blue-400 text-[10px] text-gray-600 leading-5">
+                                <span class="font-bold text-blue-800">💬 نظر داور:</span> {{ art.professor_comment }}
+                            </div>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="p-20 text-center">
+                        <div class="text-gray-300 text-4xl mb-4 text-center">📁</div>
+                        <p class="text-gray-400 italic text-xs text-center">هنوز هیچ مقاله‌ای در سیستم ثبت نکرده‌اید.</p>
+                    </td>
+                </tr>
+                {% endfor %}
+                <td class="p-3">
+                    {% if art.payment %}
+                        {% if art.payment.status == 'verified' %}
+                            <span class="text-green-600 font-bold text-xs">✅ پرداخت تایید شد</span>
+                        {% elif art.payment.status == 'pending' %}
+                            <span class="text-orange-500 font-bold text-xs">⏳ در انتظار تایید</span>
+                        {% else %}
+                            <span class="text-red-500 font-bold text-xs">❌ رد شده (دوباره آپلود کنید)</span>
+                            <a href="{% url 'upload_receipt' art.id %}" class="text-blue-600 underline text-[10px]">آپلود مجدد</a>
+                        {% endif %}
+                    {% else %}
+                        {% if art.status == 'accepted' %}
+                            <a href="{% url 'upload_receipt' art.id %}" class="bg-blue-600 text-white px-3 py-1 rounded-lg text-[10px] shadow-md">💳 پرداخت هزینه</a>
+                        {% else %}
+                            <span class="text-gray-400 text-[10px]">پس از پذیرش مقاله</span>
+                        {% endif %}
+                    {% endif %}
+                </td>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

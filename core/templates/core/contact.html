@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="bg-white p-8 rounded-lg shadow-sm border">
+    <h2 class="text-xl font-bold text-gray-800 border-r-4 border-blue-900 pr-3 mb-8">تماس با دبیرخانه کنفرانس</h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <div class="space-y-6">
+            <div>
+                <h3 class="font-bold text-blue-900 mb-2">📍 آدرس دبیرخانه:</h3>
+                <p class="text-gray-600 text-sm leading-6">زنجان، بلوار دانشگاه، دانشگاه زنجان، دانشکده مهندسی، طبقه دوم، اتاق ۲۰۴</p>
+            </div>
+            <div>
+                <h3 class="font-bold text-blue-900 mb-2">📞 تلفن و فکس:</h3>
+                <p class="text-gray-600 text-sm" dir="ltr">+98 24 3305 1234</p>
+            </div>
+            <div>
+                <h3 class="font-bold text-blue-900 mb-2">✉️ پست الکترونیکی:</h3>
+                <p class="text-gray-600 text-sm">info@znu-icee.ir</p>
+            </div>
+        </div>
+        
+        <div class="bg-gray-100 rounded-xl h-64 flex items-center justify-center border-2 border-dashed border-gray-300">
+            <span class="text-gray-400 italic">محل قرارگیری نقشه گوگل</span>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+<script src="https://cdn.tailwindcss.com"></script>
+<body class="bg-gray-50 text-right" dir="rtl">
+    <div class="container mx-auto p-6">
+        <h1 class="text-3xl font-bold text-blue-800">{{ conference.title }}</h1>
+        <p class="text-gray-600 mt-2">📍 محل برگزاری: {{ conference.location }} | 📅 تاریخ: {{ conference.hold_date }}</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h2 class="text-xl font-semibold border-b-2 border-yellow-500 mb-4">حامیان و اسپانسرها</h2>
+                <div class="flex flex-wrap gap-4">
+                    {% for sponsor in conference.sponsors.split %}
+                        <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">{{ sponsor }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h2 class="text-xl font-semibold border-b-2 border-green-500 mb-4">کمیته داوران و اساتید</h2>
+                <ul class="space-y-3">
+                    {% for prof in professors %}
+                    <li class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-gray-200 rounded-full"></div>
+                        <div>
+                            <p class="font-bold">{{ prof.user.get_full_name }}</p>
+                            <p class="text-xs text-gray-500">{{ prof.expertise }}</p>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
